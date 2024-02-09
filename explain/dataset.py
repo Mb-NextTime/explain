@@ -53,3 +53,7 @@ class VirtualDataset:
                 scores.append(score)
 
         return {'DatasetSize': sizes, 'Score': scores}
+
+    def display(self, X, y, density=20):
+        vds_res = self.fit(X.to_numpy(), y.to_numpy(), density=density)
+        sns.violinplot(vds_res, x='DatasetSize', y='Score')
