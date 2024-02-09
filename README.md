@@ -9,6 +9,11 @@
   - SHAP
   - ICE
 
+# TODO:
+- Continue adding features
+- Add proper docstrings
+- Extend to web application? - we stride for having not only a python module but also a more user-friendly interface
+
 # Reference paper
 
 https://sharelatex.ispras.ru/project/656f2eeaa47a6a0077feba12
