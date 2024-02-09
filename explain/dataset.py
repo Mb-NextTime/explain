@@ -32,22 +32,23 @@ class VirtualDataset:
 
     def fit(self, X, y, density=20):
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, stratify=y)
-        self._X_train = X_train
-        self._X_test = X_test
-        self._y_train = y_train
-        self._y_test = y_test
 
         sizes = []
         scores = []
-        for i, size in enumerate(self._sizes):
+        for size in self._sizes:
             for _ in range(density):
                 if size != 1:
-                    X, _, y, _ = train_test_split(self._X_train, self._y_train, test_size=1-size, stratify=self._y_train)
+                    X, _, y, _ = train_test_split(
+                        X_train,
+                        y_train,
+                        test_size=1-size,
+                        stratify=y_train
+                    )
                 else:
-                    X, y = self._X_train, self._y_train
+                    X, y = X_train, y_train
                 model = self._Model(**self._params)
                 model.fit(X, y)
-                score = self._metric(model.predict(self._X_test), self._y_test)
+                score = self._metric(model.predict(X_test), y_test)
                 sizes.append(len(X))
                 scores.append(score)
 

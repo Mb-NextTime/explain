@@ -2,8 +2,8 @@ import numpy as np
 import shap
 import matplotlib.pyplot as plt
 from sklearn.inspection import PartialDependenceDisplay
-from lime.lime_tabular import LimeTabularExplainer
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
+from lime.lime_tabular import LimeTabularExplainer
 
 
 class ModelEvaluator:
@@ -18,7 +18,10 @@ class ModelEvaluator:
 
     def calc_metric_folded(self, X_test, y_test, metric, n_folds=5):
         scores = []
-        for X_test_fold, y_test_fold in zip(np.array_split(X_test, n_folds), np.array_split(y_test, n_folds)):
+        for X_test_fold, y_test_fold in zip(
+                np.array_split(X_test, n_folds),
+                np.array_split(y_test, n_folds)
+                ):
             scores.append(metric(y_test_fold, self._model.predict(X_test_fold)))
         return np.array(scores)
 
@@ -34,7 +37,7 @@ class ModelExplainer:
 
         shap.plots.beeswarm(shap_values, max_display=max_display)
 
-    def plot_ICE(self, feature_indexes=None):
+    def plot_ice(self, feature_indexes=None):
         if feature_indexes is None:
             feature_indexes = range(self._data.shape[1])
         for i in feature_indexes:
@@ -49,4 +52,3 @@ class ModelExplainer:
         )
         ...
         # TODO: finish LIME & add other methods
-
