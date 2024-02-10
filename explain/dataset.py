@@ -31,6 +31,8 @@ class VirtualDataset:
         self._sizes = np.linspace(0.2, 1, self._max_iter)
 
     def fit(self, X, y, density=20):
+        X = X.to_numpy()
+        y = y.to_numpy()
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, stratify=y)
 
         sizes = []
@@ -55,5 +57,5 @@ class VirtualDataset:
         return {'DatasetSize': sizes, 'Score': scores}
 
     def display(self, X, y, density=20):
-        vds_res = self.fit(X.to_numpy(), y.to_numpy(), density=density)
-        sns.violinplot(vds_res, x='DatasetSize', y='Score')
+        vds_res = self.fit(X, y, density=density)
+        sns.violinplot(vds_res, x='DatasetSize', y='Score', density_norm='width')
