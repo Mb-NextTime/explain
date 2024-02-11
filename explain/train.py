@@ -18,12 +18,12 @@ def train_binary_classifier(X_train, y_train, X_test, y_test):
     }
 
     model = CatBoostClassifier(**model_params, logging_level='Silent')
-    cv = model.grid_search(grid_params, train_pool, plot=True, verbose=False)
+    cv = model.grid_search(grid_params, train_pool, plot=False, verbose=False)
     params, cv_results = cv['params'], cv['cv_results']
 
     params = {**model_params, **params, 'auto_class_weights': 'Balanced'}
 
     final_model = CatBoostClassifier(**params)
-    final_model.fit(train_pool, eval_set=test_pool, silent=True)
+    final_model.fit(train_pool, eval_set=test_pool, plot=False, silent=True)
 
     return final_model
