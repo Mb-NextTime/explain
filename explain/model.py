@@ -44,11 +44,17 @@ class ModelExplainer:
             PartialDependenceDisplay.from_estimator(self._model, self._data, [i], kind='both')
             plt.show()
 
-    def lime(self, *args):
+    def plot_lime(self, x, max_display=5):
+        x = np.array(x).flatten()
+        
         explainer = LimeTabularExplainer(
             self._data.to_numpy(),
             feature_names=self._data.columns.values,
             discretize_continuous=True
         )
-        ...
-        # TODO: finish LIME & add other methods
+        
+        exp = explainer.explain_instance(x, self._model.predict_proba, num_features=max_display)
+        
+        exp.show_in_notebook(show_table=True, show_all=False)
+
+    # TODO:Anchors, Counterfactual Explanations 
