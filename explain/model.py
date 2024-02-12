@@ -1,6 +1,7 @@
 import numpy as np
 import shap
 import matplotlib.pyplot as plt
+from anchor import anchor_tabular
 from sklearn.inspection import PartialDependenceDisplay
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 from lime.lime_tabular import LimeTabularExplainer
@@ -46,15 +47,32 @@ class ModelExplainer:
 
     def plot_lime(self, x, max_display=5):
         x = np.array(x).flatten()
-        
+
         explainer = LimeTabularExplainer(
             self._data.to_numpy(),
             feature_names=self._data.columns.values,
             discretize_continuous=True
         )
-        
+
         exp = explainer.explain_instance(x, self._model.predict_proba, num_features=max_display)
-        
         exp.show_in_notebook(show_table=True, show_all=False)
 
-    # TODO:Anchors, Counterfactual Explanations 
+    def plot_anchors(self, x):
+        x = np.array(x).flatten()
+        explainer = anchor_tabular.AnchorTabularExplainer(
+            ['0', '1'],
+            np.array(self._data.columns),
+            self._data.to_numpy(),
+        )
+
+        print('Prediction:', self._model.predict(np.array(x).reshape(1, -1)))
+
+        exp = explainer.explain_instance(x, self._model.predict, threshold=0.95)
+
+        print(f'Anchor: {" AND ".join(exp.names())}')
+        print(f'Precision: {exp.precision() : .2f}')
+        print(f'Coverage: {exp.coverage() : .2f}')
+
+        exp.show_in_notebook()
+
+    # TODO: Counterfactual Explanations
