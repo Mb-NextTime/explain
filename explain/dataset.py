@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.model_selection import train_test_split
+from copy import deepcopy
 
 class DatasetExplorer:
     def __init__(self, data: pd.DataFrame, target: pd.Series):
@@ -24,11 +25,10 @@ class DatasetExplorer:
 
 class VirtualDataset:
     def __init__(self, model, eval_metric, n_iter=5,):
-        self._Model = type(model)
-        self._params = model.get_params() | {'silent': True}
+        self.model = deepcopy(model)
         self._metric = eval_metric
         self._max_iter = n_iter
-        self._sizes = np.linspace(0.2, 1, self._max_iter)
+        self._sizes = np.linspace(0.2, 0.98, self._max_iter)
 
     def fit(self, X, y, density=20):
         X = X.to_numpy()
@@ -48,9 +48,8 @@ class VirtualDataset:
                     )
                 else:
                     X, y = X_train, y_train
-                model = self._Model(**self._params)
-                model.fit(X, y)
-                score = self._metric(model.predict(X_test), y_test)
+                self.model.fit(X, y)
+                score = self._metric(self.model.predict(X_test), y_test)
                 sizes.append(len(X))
                 scores.append(score)
 

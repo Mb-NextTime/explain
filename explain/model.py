@@ -33,7 +33,7 @@ class ModelExplainer:
         self._data = data
 
     def plot_shap(self, max_display=10):
-        explainer = shap.TreeExplainer(self._model)
+        explainer = shap.Explainer(self._model, self._data)
         shap_values = explainer(self._data)
 
         shap.plots.beeswarm(shap_values, max_display=max_display)
