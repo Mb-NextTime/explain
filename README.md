@@ -1,18 +1,15 @@
+# AI explainability pipeline tested on different datasets
+
+- Diabetes
+- Breast cancer
+- Heart failure
+
 # Implemented features
 
-- Simple auto-ml on binary classification tasks
-- Dataset exploration:
-  - Correlations
-  - Dataset size vs metric score plot
-- Easier to understand representations of model performance & metric scores
-- Model explanation algorithms:
-  - SHAP
+- Model-agnostic explanation algorithms & extended support for existing ones (SHAP):
+  - LIME
+  - Anchors
   - ICE
-
-# TODO:
-- Continue adding features
-- Add proper docstrings
-- Extend to web application? - we stride for having not only a python module but also a more user-friendly interface
 
 # Reference paper
 
