@@ -1,0 +1,3 @@
+[submodule "pycaret"]
+	path = pycaret
+	url = https://github.com/Mb-NextTime/pycaret
